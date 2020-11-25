@@ -1,8 +1,17 @@
 public class Litteraux extends Expression {
     private String litteral;
+    private boolean verite;
 
-    @Override
+    public Litteraux(String litteral) {
+        this.litteral = litteral;
+    }
+
+    public boolean getVerite() {
+        return verite;
+    }
+
+
     String eval() {
-        return litteral;
+        return null;
     }
 }
