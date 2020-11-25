@@ -9,9 +9,19 @@ public class ExpressionComplexe extends Expression {
         this.b = b;
     }
 
-    @Override
-    String eval() {
-        return null;
+
+    public boolean eval(Litteraux a, Litteraux b,Operateur op) throws InstantiationException {
+        switch (op.getOp()){
+            case and:
+                return a.getVerite() && b.getVerite();
+            case or:
+                return a.getVerite() || b.getVerite();
+            case implication:
+                return !a.getVerite() || b.getVerite();
+            case equivalence:
+                return eval(a,b,new Operateur("⇒")) && eval(b,a,new Operateur("⇒"));
+            default: throw new InstantiationException("evaluation fausse");
+        }
     }
 
     public void transformeStringToExpression(String s){
