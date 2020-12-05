@@ -8,10 +8,10 @@ public class Operateur {
     private OP op;
     public Operateur(String s) throws InstantiationException {
         switch (s){
-            case "∨": this.op = OP.or;
-            case "⇒": this.op = OP.implication;
-            case "∧": this.op = OP.and;
-            case "⇔": this.op = OP.equivalence;
+            case "∨": this.op = OP.or;break;
+            case "⇒": this.op = OP.implication;break;
+            case "∧": this.op = OP.and;break;
+            case "⇔": this.op = OP.equivalence;break;
             default: throw new InstantiationException("Problème d'opérateur");
         }
     }
@@ -20,4 +20,7 @@ public class Operateur {
         return op;
     }
 
+    public void setOp(OP op) {
+        this.op = op;
+    }
 }
