@@ -47,7 +47,7 @@ public class InfixToPostFix {
     }
 
     public static void main(String[] args) {
-        String exp = "((p⇒q)∧((r∧s)⇒p)∧(t⇒r)∧(s∧t))⇒q";
+        String exp = "((p⇒q)⇒q)⇒p";
         System.out.println("Infix Expression: " + exp);
         System.out.println("Postfix Expression: " + infixToPostFix(exp));
     }

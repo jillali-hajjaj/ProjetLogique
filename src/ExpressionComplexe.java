@@ -268,6 +268,7 @@ public class ExpressionComplexe extends Expression {
     }
 
 
+
     @Override
     public String toString() {
         return "ExpressionComplexe{" +
@@ -284,7 +285,9 @@ public class ExpressionComplexe extends Expression {
     public static void main(String[] args) throws InstantiationException {
         ExpressionComplexe e = new ExpressionComplexe();
         System.out.println(("((p⇒q)⇒q)⇒q"));
+
         e.stringToExpression("(u∧(w⇒v)∧(t⇒v)∧(u⇒(w∨t)))⇒v");
         System.out.println(e.stringToExpression2("(u∧(w⇒v)∧(t⇒v)∧(u⇒(w∨t)))⇒v"));
+
     }
 }
