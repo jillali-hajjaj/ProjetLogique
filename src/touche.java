@@ -10,30 +10,31 @@ public class touche extends JPanel {
     JButton bouton = new JButton("Enregistrer");
     JLabel label ;
     JTextField textField = new JTextField();
-    touche(){
+    touche()throws InstantiationException {
 
 
 
 
-        setLayout(new BorderLayout(5,5));
+        //setLayout(new BorderLayout(3,3));
         JPanel indications = new JPanel();
         label = new JLabel("Point : " + i);
-        indications.setLayout(new GridLayout(4,1));
+        indications.setLayout(new GridLayout(3,1));
         indications.add(textField);
         indications.add(bouton);
         indications.add(label);
         A = new ardoise();
         add(indications , BorderLayout.NORTH);
-        add(A , BorderLayout.CENTER);
+        add(A , BorderLayout.SOUTH);
+        //A.ListExpression();
         bouton.addActionListener(new ActionListener()
         {
             public void actionPerformed(ActionEvent e)
             {
 
-                A.Saisi = textField.getText();
+                A.Mots = textField.getText();
                 ++i;
                 label.setText("Point : " + i);
-                A.setForeground(Color.RED);
+                A.dessin();
                 repaint();
 
             }
