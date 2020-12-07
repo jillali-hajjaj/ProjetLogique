@@ -219,6 +219,6 @@ public class ExpressionComplexe extends Expression {
     public static void main(String[] args) throws InstantiationException {
         ExpressionComplexe e = new ExpressionComplexe();
         System.out.println(("((p⇒q)⇒q)⇒q"));
-        e.stringToExpression("(u∧(w⇒v)∧(t⇒v)∧(u⇒(w∨t)))⇒v");
+        e.stringToExpression("p⇒((p⇒q)⇒q)");
     }
 }
