@@ -192,6 +192,71 @@ public class ExpressionComplexe extends Expression {
         System.out.println(etapes);
     }
 
+    public String stringToExpression2(String formule) throws InstantiationException {
+        String postfixe = infixToPostFix(formule);
+        ArrayList<String> litteraux = new ArrayList<>();
+        ExpressionComplexe e = new ExpressionComplexe();
+        System.out.println(postfixe);
+        ArrayList<String> etapes = new ArrayList<>();
+        String result = "";
+        for (int i = 0; i < postfixe.length(); i++) {
+            if (!isOperateur(postfixe.charAt(i))) {
+                litteraux.add(Character.toString(postfixe.charAt(i)));
+            } else if (postfixe.charAt(i) == '⇒') {
+                if (!litteraux.contains("∨") && !litteraux.contains("∧")) {
+                    litteraux.add(0, "¬");
+                    litteraux.add("∨");
+                } else {
+                    String dernier = "";
+                    dernier = litteraux.get(litteraux.size() - 1);
+                    ArrayList<String> sousFormule = new ArrayList<>();
+                    for (int j = 0; j < litteraux.size() - 1; j++) {
+                        sousFormule.add(litteraux.get(j));
+                    }
+                    for (int j = 0; j < sousFormule.size(); j++) {
+                        if (sousFormule.get(j).equals("¬")) {
+                            sousFormule.set(j, "");
+                            j++;
+                        } else {
+                            switch (sousFormule.get(j)) {
+                                case "∧":
+                                    sousFormule.set(j, "∨");
+                                    break;
+                                case "∨":
+                                    sousFormule.set(j, "∧");
+                                    break;
+                                case "⇒":
+                                    break;
+                                default:
+                                    sousFormule.add(j, "¬");
+                                    j++;
+                            }
+                        }
+                    }
+                    litteraux = sousFormule;
+                    litteraux.add(dernier);
+                    litteraux = (ArrayList<String>) litteraux.stream().filter(s -> !s.equals("")).collect(Collectors.toList());
+                    litteraux.add("∨");
+                    dernier ="";
+                    for (int j = 0; j < litteraux.size(); j++) {
+                        dernier+= litteraux.get(j);
+                    }
+                    etapes.add(dernier);
+                }
+            }
+        }
+        postfixe = "";
+        for (int i = 0; i < litteraux.size(); i++) {
+            postfixe+= litteraux.get(i);
+        }
+
+        for (int i = 0; i < litteraux.size(); i++) {
+            result+= litteraux.get(i);
+        }
+      //  System.out.println(result);
+        System.out.println(etapes);
+        return result;
+    }
     public boolean isOperateur(char c){
         return switch (c) {
             case '∨' -> true;
@@ -220,6 +285,9 @@ public class ExpressionComplexe extends Expression {
     public static void main(String[] args) throws InstantiationException {
         ExpressionComplexe e = new ExpressionComplexe();
         System.out.println(("((p⇒q)⇒q)⇒q"));
-        e.stringToExpression("p⇒((p⇒q)⇒q)");
+
+        e.stringToExpression("(u∧(w⇒v)∧(t⇒v)∧(u⇒(w∨t)))⇒v");
+        System.out.println(e.stringToExpression2("(u∧(w⇒v)∧(t⇒v)∧(u⇒(w∨t)))⇒v"));
+
     }
 }
