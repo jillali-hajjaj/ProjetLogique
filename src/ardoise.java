@@ -1,19 +1,19 @@
-import java.awt.*;
-import java.awt.event.*;
 import javax.swing.*;
-import java.io.File;
-import javax.imageio.ImageIO;
-import java.io.IOException;
+import java.awt.*;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.font.TextAttribute;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ardoise extends JPanel  implements MouseListener {
+public class ardoise extends JPanel  {
     private static final long serialVersionUID = 6335221551069472985L;
     // private static JTextField textField;
     private static JTextArea a;
     private static JLabel b;
     public String Mots = "";
+    public int compteur = 0 ;
     private JLayeredPane pane;
     JButton bouton;
     private GridBagConstraints paneConstraints;
@@ -24,13 +24,15 @@ public class ardoise extends JPanel  implements MouseListener {
     private static int maxBranchs = 0;
     private Map<JTextArea, JTextArea> childrenToParent = new HashMap<>();
     private JTextArea rootArea;
+    JLabel Valide = new JLabel();
 
-    //ArrayList<ArrayList<String>> result = new ArrayList<ArrayList<String>>();
     public String valide ;
     public ArrayList<String> tb = new ArrayList<>();
 
-    public JTextArea formulesDeveloppees;
+    public JTextArea formulesDeveloppees = new JTextArea();
     public ardoise() {
+        compteur = 0;
+        maxBranchs = 100;
 
         setLayout(new GridBagLayout());
         GridBagConstraints constraints = new GridBagConstraints();
@@ -41,7 +43,7 @@ public class ardoise extends JPanel  implements MouseListener {
         constraints.gridy = 1;
         constraints.insets = new Insets(10, 0, 0, 0);
         pane.setPreferredSize(new Dimension(1000, 500));
-        pane.setBorder(BorderFactory.createTitledBorder("Arbre"));
+        pane.setBorder(BorderFactory.createTitledBorder("Dessin"));
 
         pane.setLayout(new GridBagLayout());
         paneConstraints = new GridBagConstraints();
@@ -49,14 +51,13 @@ public class ardoise extends JPanel  implements MouseListener {
         add(pane, constraints);
 
 
+       // OptionsPanel.setPoints(0);
 
     }
-
+/*
     public ArrayList<ArrayList<String>> ListExpression()throws InstantiationException {
 
-        ExpressionComplexe e = new ExpressionComplexe();
-        //String form = "¬pq∨¬q∧q∨";
-        String form = e.stringToExpression2(Mots);
+        String form = "e.stringToExpression2(Mots)";
 
         System.out.println("debut " + form);
         int n = form.length() - 1;
@@ -73,29 +74,6 @@ public class ardoise extends JPanel  implements MouseListener {
             }
 
         }
-        /*
-String po = "";
-        for(int i = form.length() - 1; i >0 ; --i) {
-            if (form.charAt(i) == '∨' || i == 1) {
-                tb.add(form.substring(i - 1, n) +po);
-                System.out.println(tb);
-                n = i-1;
-
-            }
-
-            if (form.charAt(i) == '∧' ) {
-                if(form.charAt(i-1) == '¬' ) {
-                    po = po + form.substring(i,i - 2);
-                }else {
-                    po = po+ form.charAt(i-1);
-
-                }
-
-            }
-        }
-        System.out.println("mots " + tb);
-
-*/
 
         ArrayList<ArrayList<String>> result = new ArrayList<ArrayList<String>>();
 
@@ -146,66 +124,44 @@ String po = "";
 
 
     }
+    */
     public void dessin() {
 
+        compteur = 0 ;
 
 
-
-
-        maxBranchs = countSymbolesPropositionnels(Mots);
+        JTextArea formulesDeveloppees = new JTextArea();
+        formulesDeveloppees.setEditable(false);
+        formulesDeveloppees.setText(Mots);
+        formulesDeveloppees.setBounds(5, 30, 990, 30);
+        maxBranchs = 100; /*countSymbolesPropositionnels(textField.getText())*2; *///x2 au cas où ce soit seulement des OU
 
         for ( Component comp : pane.getComponents() ) {
             pane.remove(comp);
         }
 
-         formulesDeveloppees = new JTextArea();
-        formulesDeveloppees.setEditable(false);
-        formulesDeveloppees.setText(Mots);
-        formulesDeveloppees.setBounds(5, 30, 990, 30);
         if ( maxBranchs % 2 == 1 )
             paneConstraints.gridx = maxBranchs/2+1;
         else
             paneConstraints.gridx = maxBranchs/2;
-        System.out.println("rootGridX: " + paneConstraints.gridx);
-        paneConstraints.gridy = 0;
-        paneConstraints.insets = new Insets(10, 0, 0, 0);
-        pane.add(formulesDeveloppees, paneConstraints);
 
-        //addMouseListener(formulesDeveloppees);
-
-        textAreaToGridX.clear();
-        textAreaToGridX.put(formulesDeveloppees, 0);
-        textAreaToGridY.put(formulesDeveloppees, paneConstraints.gridy);
-        rootArea = formulesDeveloppees;
-        System.out.println(textAreaToGridX.get(formulesDeveloppees));
-
-        //pane.updateUI();
-        pane.revalidate();
-        pane.repaint();
-        for (Component comp : pane.getComponents()) {
-            pane.remove(comp);
-        }
-
-
-        formulesDeveloppees.setBounds(5, 30, 990, 30);
-        paneConstraints.gridx = 0;
         paneConstraints.gridy = 0;
         paneConstraints.insets = new Insets(10, 0, 0, 0);
         pane.add(formulesDeveloppees, paneConstraints);
 
         addMouseListener(formulesDeveloppees);
 
-        //pane.updateUI();
+        textAreaToGridX.clear();
+        textAreaToGridX.put(formulesDeveloppees, paneConstraints.gridx);
+        textAreaToGridY.put(formulesDeveloppees, paneConstraints.gridy);
+        rootArea = formulesDeveloppees;
+
+
+        Valide.setLocation(50,40);
+        add(Valide);
         pane.revalidate();
         pane.repaint();
-				/*updateUI();
-				repaint();
-				revalidate();
-				doLayout();*/
 
-        //pane.doLayout();
-
-        //TODO RESET POINTS
 
 
     }
@@ -221,94 +177,148 @@ String po = "";
         }
         return count;
     }
-
+public int ML = 0;
     private void addMouseListener(JTextArea area){
         area.addMouseListener(new MouseListener() {
 
-            @Override
-            public void mouseReleased(MouseEvent e) {
-                // TODO Auto-generated method stub
 
-            }
+            @Override
+            public void mouseClicked(MouseEvent e) {
+
+                if (e.getComponent() instanceof JTextArea) {
+
+                    if (e.getButton() == 1) { //clic gauche
+
+                        SplitFormule formules = new Formule(((JTextArea) e.getComponent()).getText()).split();
+                        //System.out.println(e.getComponent().getClass());
+
+                        if (e.getComponent() instanceof JTextArea) {
+                            // System.out.println((((JTextArea) e.getComponent()).getText()));
+                            //  couple<String> formules = new formule(((JTextArea) e.getComponent().getText()).split();
+                            System.out.println(textAreaToGridX.get(e.getComponent()));
+
+                            createChildren(formules, (JTextArea) e.getComponent());
+
+
+                            //fix GUI and add listener to the textArea generated
+                            pane.revalidate();
+                            //addMouseListener(firstSplit);
+
+
+                            //remove listener for this area
+                            for (MouseListener m : e.getComponent().getMouseListeners()) {
+                                e.getComponent().removeMouseListener(m);
+                            }
+                            compteur++;
+                            touche.redessiner();
+                            Valide.setText("");
+
+                            add(Valide);
+                        }
+                    }
+
+                    else if ( e.getButton() == 3 ) { //clic droit
+                        String str = ((JTextArea) e.getComponent()).getText().replaceAll(" ", "");
+
+                            if (containsContradiction(str)) {
+                                JTextArea contra = new JTextArea();
+                                contra.setEditable(false);
+                                contra.setText("⊥");
+                                contra.setBounds(5, 30, 990, 30);
+
+                                Font font = new Font("helvetica", Font.PLAIN, 12);
+                                Map attributes = font.getAttributes();
+                                attributes.put(TextAttribute.FONT, TextAttribute.FONT);
+                                Font newFont = new Font(attributes);
+
+                                int test = textAreaToGridY.get((JTextArea)e.getComponent())+1;
+                                paneConstraints.gridx = textAreaToGridX.get((JTextArea)e.getComponent());
+                                paneConstraints.gridy = textAreaToGridY.get((JTextArea)e.getComponent()) + 1;
+                                double X = ((JTextArea) e.getComponent()).getLocation().getX();
+                                double Y = ((JTextArea) e.getComponent()).getLocation().getY();
+                                System.out.println("Position du X " +(int) X);
+                                System.out.println("Position du Y " +(int) Y);
+                                contra.setLocation((int) X, (int) Y + 10);
+                                System.out.println(contra.getLocation());
+                                pane.add(contra , paneConstraints);
+                                ((JTextArea) e.getComponent()).setFont(newFont);
+
+                                for (MouseListener m : e.getComponent().getMouseListeners()) {
+                                    e.getComponent().removeMouseListener(m);
+                                }
+                            } else {
+                                JTextArea contra = new JTextArea();
+                                contra.setEditable(false);
+                                contra.setText("X");
+                                contra.setBounds(5, 30, 990, 30);
+
+                                Font font = new Font("helvetica", Font.PLAIN, 12);
+                                Map attributes = font.getAttributes();
+                                attributes.put(TextAttribute.FONT, TextAttribute.FONT);
+                                Font newFont = new Font(attributes);
+
+                               int test = textAreaToGridY.get((JTextArea)e.getComponent())+1;
+                                paneConstraints.gridx = textAreaToGridX.get((JTextArea)e.getComponent());
+                                paneConstraints.gridy = textAreaToGridY.get((JTextArea)e.getComponent()) + 1;
+                                double X = ((JTextArea) e.getComponent()).getLocation().getX();
+                                double Y = ((JTextArea) e.getComponent()).getLocation().getY();
+                                System.out.println("Position du X " +(int) X);
+                                System.out.println("Position du Y " +(int) Y);
+                                contra.setLocation((int) X, (int) Y + 10);
+                                System.out.println(contra.getLocation());
+                                pane.add(contra , paneConstraints);
+                                ((JTextArea) e.getComponent()).setFont(newFont);
+
+                                for (MouseListener m : e.getComponent().getMouseListeners()) {
+                                    e.getComponent().removeMouseListener(m);
+                                }
+                            }
+                        }
+                    }
+                }
 
             @Override
             public void mousePressed(MouseEvent e) {
-                // TODO Auto-generated method stub
 
             }
 
             @Override
-            public void mouseExited(MouseEvent e) {
-                // TODO Auto-generated method stub
+            public void mouseReleased(MouseEvent e) {
 
             }
 
             @Override
             public void mouseEntered(MouseEvent e) {
-                // TODO Auto-generated method stub
 
             }
 
             @Override
-            public void mouseClicked(MouseEvent e) {
+            public void mouseExited(MouseEvent e) {
 
-                    //System.out.println(e.getComponent().getClass());
-
-                    if (e.getComponent() instanceof JTextArea) {
-                       // System.out.println((((JTextArea) e.getComponent()).getText()));
-                        //  couple<String> formules = new formule(((JTextArea) e.getComponent().getText()).split();
-                        System.out.println(textAreaToGridX.get(e.getComponent()));
-
-                        try {
-                            createChildren(1, (JTextArea) e.getComponent());
-                        } catch (InstantiationException instantiationException) {
-                            instantiationException.printStackTrace();
-                        }
-
-
-                        //fix GUI and add listener to the textArea generated
-                        pane.revalidate();
-                        //addMouseListener(firstSplit);
-
-
-                        //remove listener for this area
-                        for (MouseListener m : e.getComponent().getMouseListeners()) {
-                            e.getComponent().removeMouseListener(m);
-                        }
-                    }
-                }
+            }
 
         });
     }
-    @Override
-    public void mouseClicked(MouseEvent e) {
 
-    }
 
-    @Override
-    public void mousePressed(MouseEvent e) {
 
-    }
+	/*private int countSymbolesPropositionnels(String str) {
+		int count = 0;
+		for ( int i = 0 ; i < str.length() ; i++ ) {
+			if ( str.charAt(i) == '∧' || str.charAt(i) == '∨' || str.charAt(i) == '¬' || ((int) str.charAt(i)) == 8594) {
+				count++;
+			}
+		}
+		return count;
+	}*/
 
-    @Override
-    public void mouseReleased(MouseEvent e) {
-
-    }
-
-    @Override
-    public void mouseEntered(MouseEvent e) {
-
-    }
-
-    @Override
-    public void mouseExited(MouseEvent e) {
-
-    }
 
     /*
      * Get the nearest left grid x by going up in the tree
      */
     private int getNearestLeftGridX(JTextArea directFather) {
+
+        //System.out.println("-------NEAREST LEFT----------");
 
         JTextArea actual = directFather;
         boolean gridXHasOnlyReduced = true;
@@ -323,13 +333,14 @@ String po = "";
             }
         }
 
-        System.out.println("actual = directFather: "+ actual.equals(directFather));
-        System.out.println("actual = rootArea : "+ actual.equals(rootArea) );
+		/*System.out.println("actual = directFather: "+ actual.equals(directFather));
+		System.out.println("actual = rootArea : "+ actual.equals(rootArea) +" && hasOnlyReduced: "+ gridXHasOnlyReduced);
 
+		System.out.println("---------------------");*/
         if ( actual.equals(directFather) || (actual.equals(rootArea) && gridXHasOnlyReduced) )
             return 0;
 
-        System.out.println("nearestLeftGridX: "+textAreaToGridX.get(actual));
+        //System.out.println("nearestLeftGridX: "+textAreaToGridX.get(actual));
         return textAreaToGridX.get(actual);
     }
 
@@ -338,20 +349,27 @@ String po = "";
      */
     private int getNearestRightGridX(JTextArea directFather) {
 
+        //System.out.println("-------NEAREST RIGHT----------");
+
         JTextArea actual = directFather;
+        boolean gridXHasOnlyReduced = true;
 
         while ( childrenToParent.get(actual) != null ) { //tant qu'il y a un père
             if ( textAreaToGridX.get(childrenToParent.get(actual)) < textAreaToGridX.get(actual) ) {
                 actual = childrenToParent.get(actual);
             } else {
                 actual = childrenToParent.get(actual);
-                System.out.println("breaked at the parent of : "+actual.getText());
+                gridXHasOnlyReduced = false;
+                //System.out.println("broke at the parent of : "+actual.getText());
                 break;
             }
         }
 
+		/*System.out.println("actual = directFather: "+ actual.equals(directFather));
+		System.out.println("actual = rootArea : "+ actual.equals(rootArea) +" && hasOnlyReduced: "+ gridXHasOnlyReduced);
 
-        if ( actual.equals(directFather) )
+		System.out.println("---------------------");*/
+        if ( actual.equals(directFather) || (actual.equals(rootArea) && gridXHasOnlyReduced) )
             return maxBranchs;
 
         return textAreaToGridX.get(actual);
@@ -362,30 +380,36 @@ String po = "";
     /*
      * Add a textArea on the bottom right of the father
      */
-
     private void createRightChild(String text, JTextArea father) {
+        JTextArea fleche = new JTextArea();
+        fleche.setEditable(false);
+        fleche.setText("↘");
+        fleche.setBounds(5, 30, 990, 30);
 
-        //int fatherGridX = textAreaToGridX.get(father);
-        int fatherGridX = textAreaToGridX.get(father)-100;
+        int fatherGridX = textAreaToGridX.get(father);
+
+
         JTextArea secondSplit = new JTextArea();
         secondSplit.setEditable(false);
         secondSplit.setText(text);
         secondSplit.setBounds(5, 30, 990, 30);
-        System.out.println(Math.ceil((getNearestRightGridX(father) - fatherGridX) / 2.0 ) + fatherGridX);
-     //   paneConstraints.gridx = (int) (Math.ceil((getNearestRightGridX(father) - fatherGridX) / 2.0 ) + fatherGridX) ;
+        paneConstraints.gridx = (int) (Math.ceil((getNearestRightGridX(father) - fatherGridX) / 2.0 ) + fatherGridX);
         paneConstraints.gridy = textAreaToGridY.get(father)+1;
-        System.out.println(fatherGridX);
-        paneConstraints.insets = new Insets(10, 0, 0, fatherGridX +200) ;
+
+        paneConstraints.insets = new Insets(10, 0, 0, 0);
+        pane.add(fleche, paneConstraints);
+        paneConstraints.gridx = paneConstraints.gridx +1;
+        paneConstraints.gridy = paneConstraints.gridy +1;
         pane.add(secondSplit, paneConstraints);
 
 
-        textAreaToGridX.put(secondSplit, fatherGridX * 2);
+        textAreaToGridX.put(secondSplit, paneConstraints.gridx);
         textAreaToGridY.put(secondSplit, paneConstraints.gridy);
         childrenToParent.put(secondSplit, father);
         addMouseListener(secondSplit);
 
 
-        System.out.println("RIGHT CHILD /// fatherGridX: "+ fatherGridX + " gridX: "+ paneConstraints.gridx + " NearestRight: "+ getNearestRightGridX(father) );
+        //System.out.println("RIGHT CHILD /// fatherGridX: "+ fatherGridX + " gridX: "+ paneConstraints.gridx + " NearestRight: "+ getNearestRightGridX(father) );
 
 
     }
@@ -395,16 +419,24 @@ String po = "";
      */
     private void createLeftChild(String text, JTextArea father) {
 
-        //int fatherGridX = textAreaToGridX.get(father);
-        int fatherGridX = textAreaToGridX.get(father) +100;
+        int fatherGridX = textAreaToGridX.get(father);
+
+        JTextArea fleche = new JTextArea();
+        fleche.setEditable(false);
+        fleche.setText("↙");
+        fleche.setBounds(5, 30, 990, 30);
+
         JTextArea firstSplit = new JTextArea();
         firstSplit.setEditable(false);
         firstSplit.setText(text);
         firstSplit.setBounds(5, 30, 990, 30);
-      //  paneConstraints.gridx = (int) (Math.ceil((fatherGridX - getNearestLeftGridX(father)) / 2) + getNearestLeftGridX(father));
+        paneConstraints.gridx = (int) (Math.ceil((fatherGridX - getNearestLeftGridX(father)) / 2) + getNearestLeftGridX(father)) ;
         paneConstraints.gridy = textAreaToGridY.get(father)+1;
-        System.out.println(fatherGridX);
-        paneConstraints.insets = new Insets(10, fatherGridX , 0, 0);
+
+        paneConstraints.insets = new Insets(10, 0, 0, 0);
+        pane.add(fleche, paneConstraints);
+        paneConstraints.gridx = paneConstraints.gridx -1;
+        paneConstraints.gridy = paneConstraints.gridy +1;
         pane.add(firstSplit, paneConstraints);
 
 
@@ -413,94 +445,104 @@ String po = "";
         childrenToParent.put(firstSplit, father);
         addMouseListener(firstSplit);
 
-
-
-        System.out.println("LEFT CHILD /// fatherGridX: "+ fatherGridX + " gridX: "+ paneConstraints.gridx + " Nearest Left: " + getNearestLeftGridX(father));
-
     }
 
     /*
      * Add a textArea below the fatherGridX
      */
-    private void createAloneChild(String text, JTextArea father) throws InstantiationException {
-        ArrayList<ArrayList<String>> result = this.ListExpression();
+    private void createAloneChild(SplitFormule formule, JTextArea father) {
 
-        int tampon =  paneConstraints.gridy;
-       paneConstraints.gridy = 0;
-        int tamponX =  paneConstraints.gridx;
-        paneConstraints.gridx = 0;
-        int o = 0 ;
-        System.out.println(result);
-        for (int i = 0; i < result.size();++i){
-            JTextArea split2 = new JTextArea();
-            split2.setEditable(false);
-            split2.setText("↓");
-            split2.setBounds(5, 30, 990, 30);
-           // paneConstraints.gridx =  o+1 ;
-            System.out.println(paneConstraints.gridx);
-            paneConstraints.gridy = 0 +1;
+        int fatherGridX = textAreaToGridX.get(father);
+
+        JTextArea fleche = new JTextArea();
+        fleche.setEditable(false);
+        fleche.setText("↓");
+        fleche.setBounds(5, 30, 990, 30);
 
 
-
-            paneConstraints.gridx = 0;
-
-            paneConstraints.insets = new Insets(10, 50*o, 0, 0);
-
-
-            pane.add(split2, paneConstraints);
-            for (int j = 0; j < result.get(i).size(); ++j) {
-                System.out.println(result.get(i).get(j));
-
-
-                //   System.out.println(textAreaToGridX.get(father));
-                //  System.out.println(textAreaToGridX.get(formulesDeveloppees));
-                //  int fatherGridX = textAreaToGridX.get(father);
-
-                JTextArea split = new JTextArea();
-                split.setEditable(false);
-                split.setText(result.get(i).get(j));
-                split.setBounds(5, 30, 990, 30);
-                //paneConstraints.gridx = fatherGridX;
-                paneConstraints.gridy = paneConstraints.gridy +1;
-
-                paneConstraints.insets = new Insets(10, 50*o, 0, 0);
-                pane.add(split, paneConstraints);
-
-
-             //   textAreaToGridX.put(split, paneConstraints.gridx);
-            //    textAreaToGridY.put(split, paneConstraints.gridy);
-            //    childrenToParent.put(split, father);
-               // addMouseListener(split);
-            }
-            ++o;
-
-        }
-        paneConstraints.gridy = paneConstraints.gridy +1;
-        paneConstraints.gridy = paneConstraints.gridy +1;
-        paneConstraints.gridy = paneConstraints.gridy +1;
         JTextArea split = new JTextArea();
         split.setEditable(false);
-        split.setText(valide);
+        split.setText(formule.getF1().toString()+"\n\n"+formule.getF2().toString());
         split.setBounds(5, 30, 990, 30);
+        paneConstraints.gridx = fatherGridX;
+        paneConstraints.gridy = textAreaToGridY.get(father)+1;
+
+        paneConstraints.insets = new Insets(10, 0, 0, 0);
+        pane.add(fleche, paneConstraints);
+        paneConstraints.gridy = paneConstraints.gridy +1;
         pane.add(split, paneConstraints);
 
 
-
-
+        textAreaToGridX.put(split, paneConstraints.gridx);
+        textAreaToGridY.put(split, paneConstraints.gridy);
+        childrenToParent.put(split, father);
+        addMouseListener(split);
     }
 
 
 
 
-    private void createChildren(int couple, JTextArea father) throws InstantiationException {
-        if ( couple == 1 ) //un seul couple est retourné
-            createAloneChild("test1", father);
+    private void createChildren(SplitFormule formule, JTextArea father) {
+        if ( formule.getOp() == Operateur.AND ) {
+            createAloneChild(formule, father);
+        }
         else {
-            createLeftChild("test2", father);
-            createRightChild("test3", father);
+            createLeftChild(formule.getF1().toString(), father);
+            createRightChild(formule.getF2().toString(), father);
         }
 
     }
+
+
+
+    private boolean containsContradiction(String str) {
+        String[] parts = str.split("\n\n");
+        String[] tab = new String[parts.length];
+
+        for ( int i = 0 ; i < parts.length ; i++ ) {
+            parts[i] = parts[i].replaceAll(" ", "");
+            parts[i] = parts[i].replaceAll("\\(", "");
+            parts[i] = parts[i].replaceAll("\\)", "");
+
+            tab[i]= parts[i];
+        }
+
+
+        for ( String part : tab ) {
+
+            //System.out.println("length : "+part.length()+ " ("+part+")");
+
+            if ( part.length() < 3 ) {
+                for ( String otherPart : parts ) {
+
+                    //System.out.println("part: "+part+" / otherPart: "+otherPart);
+
+                    if ( !part.equals(otherPart) ) {
+
+                        if ( part.contains("¬") && !otherPart.contains("¬") ) {
+
+                            char c = part.charAt(part.indexOf("¬")+1);
+                            if ( otherPart.contains(c+"") )
+                                return true;
+
+                        } else if ( otherPart.contains("¬") && !part.contains("¬") ) {
+
+                            char c = otherPart.charAt(part.indexOf("¬")+1);
+                            if ( part.contains(c+"") )
+                                return true;
+
+                        }
+
+                    }
+                }
+            }
+        }
+
+        return false;
+    }
+
+
+
 
 
 }

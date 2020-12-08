@@ -4,15 +4,15 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class touche extends JPanel {
-    ardoise A ;
+    static ardoise A ;
     int i = 0;
     String Saisi = "";
     JButton bouton = new JButton("Enregistrer");
-    JLabel label ;
+    static JLabel label ;
     JTextField textField = new JTextField();
     touche()throws InstantiationException {
 
-
+    i=0;
 
 
         //setLayout(new BorderLayout(3,3));
@@ -30,15 +30,21 @@ public class touche extends JPanel {
         {
             public void actionPerformed(ActionEvent e)
             {
+                i=0;
 
                 A.Mots = textField.getText();
-                ++i;
-                label.setText("Point : " + i);
                 A.dessin();
                 repaint();
 
             }
         });
+
+    }
+
+    static public  void redessiner(){
+        label.setText("Point : " + A.compteur);
+
+
 
     }
 }

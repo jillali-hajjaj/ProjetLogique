@@ -9,7 +9,7 @@ public class fenetre extends JFrame {
 
         super("Logique");
 
-        Dimension d = new Dimension(800, 600);
+        Dimension d = new Dimension(1050, 700);
 
         setContentPane(new touche());
         setPreferredSize(d);
