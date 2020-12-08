@@ -51,80 +51,80 @@ public class ardoise extends JPanel  {
         add(pane, constraints);
 
 
-       // OptionsPanel.setPoints(0);
+        // OptionsPanel.setPoints(0);
 
     }
-/*
-    public ArrayList<ArrayList<String>> ListExpression()throws InstantiationException {
+    /*
+        public ArrayList<ArrayList<String>> ListExpression()throws InstantiationException {
 
-        String form = "e.stringToExpression2(Mots)";
+            String form = "e.stringToExpression2(Mots)";
 
-        System.out.println("debut " + form);
-        int n = form.length() - 1;
-       for(int i = form.length() - 1; i >0 ; --i){
-            if(form.charAt(i) == '∨' || i==1) {
+            System.out.println("debut " + form);
+            int n = form.length() - 1;
+           for(int i = form.length() - 1; i >0 ; --i){
+                if(form.charAt(i) == '∨' || i==1) {
 
-                String mots = form.substring(i-1,n);
-                n = i-1;
-                System.out.println(mots);
-               mots= mots.replaceAll("∨" , "");
-                mots= mots.replaceAll(" " , "");
+                    String mots = form.substring(i-1,n);
+                    n = i-1;
+                    System.out.println(mots);
+                   mots= mots.replaceAll("∨" , "");
+                    mots= mots.replaceAll(" " , "");
 
-                tb.add(mots);
-            }
-
-        }
-
-        ArrayList<ArrayList<String>> result = new ArrayList<ArrayList<String>>();
-
-        for (int i = 0 ; i < tb.size();++i){
-            String lettre = tb.get(i).replaceAll("∧" , "");
-            ArrayList<String> tam =new ArrayList<String>();
-            for(int j = 0 ; j < lettre.length() ; ++j){
-                if(lettre.charAt(j) == '¬'){
-                    tam.add(lettre.substring(j,j+2));
-                    ++j;
-
-
-                }else{
-                    tam.add(lettre.substring(j,j+1));
+                    tb.add(mots);
                 }
 
-            };
-            result.add(tam);
-        }
-        System.out.println("fin " +result);
+            }
 
-        for(int i = 0 ; i<result.size();++i){
-            boolean m = true;
-            for (int j = 0 ; j<result.get(i).size();++j) {
-                for (int o = 0; o < result.get(i).size(); ++o) {
-                   // System.out.println("lettre : " + result.get(1));
+            ArrayList<ArrayList<String>> result = new ArrayList<ArrayList<String>>();
 
-                    if (result.get(i).get(j).charAt(0) == '¬') {
+            for (int i = 0 ; i < tb.size();++i){
+                String lettre = tb.get(i).replaceAll("∧" , "");
+                ArrayList<String> tam =new ArrayList<String>();
+                for(int j = 0 ; j < lettre.length() ; ++j){
+                    if(lettre.charAt(j) == '¬'){
+                        tam.add(lettre.substring(j,j+2));
+                        ++j;
 
-                        if (result.get(i).get(o).charAt(0) == result.get(i).get(j).charAt(1) && m){
 
-                            result.get(i).add("⟂");
-                            m = false;
-                            valide = "Valide";
+                    }else{
+                        tam.add(lettre.substring(j,j+1));
+                    }
 
+                };
+                result.add(tam);
+            }
+            System.out.println("fin " +result);
+
+            for(int i = 0 ; i<result.size();++i){
+                boolean m = true;
+                for (int j = 0 ; j<result.get(i).size();++j) {
+                    for (int o = 0; o < result.get(i).size(); ++o) {
+                       // System.out.println("lettre : " + result.get(1));
+
+                        if (result.get(i).get(j).charAt(0) == '¬') {
+
+                            if (result.get(i).get(o).charAt(0) == result.get(i).get(j).charAt(1) && m){
+
+                                result.get(i).add("⟂");
+                                m = false;
+                                valide = "Valide";
+
+                            }
                         }
                     }
                 }
-            }
-            if(m){
-                result.get(i).add("✕");
-                valide = "Non Valide";
+                if(m){
+                    result.get(i).add("✕");
+                    valide = "Non Valide";
+
+                }
 
             }
+            return result;
+
 
         }
-        return result;
-
-
-    }
-    */
+        */
     public void dessin() {
 
         compteur = 0 ;
@@ -177,7 +177,7 @@ public class ardoise extends JPanel  {
         }
         return count;
     }
-public int ML = 0;
+    public int ML = 0;
     private void addMouseListener(JTextArea area){
         area.addMouseListener(new MouseListener() {
 
@@ -220,62 +220,62 @@ public int ML = 0;
                     else if ( e.getButton() == 3 ) { //clic droit
                         String str = ((JTextArea) e.getComponent()).getText().replaceAll(" ", "");
 
-                            if (containsContradiction(str)) {
-                                JTextArea contra = new JTextArea();
-                                contra.setEditable(false);
-                                contra.setText("⊥");
-                                contra.setBounds(5, 30, 990, 30);
+                        if (containsContradiction(str)) {
+                            JTextArea contra = new JTextArea();
+                            contra.setEditable(false);
+                            contra.setText("⊥");
+                            contra.setBounds(5, 30, 990, 30);
 
-                                Font font = new Font("helvetica", Font.PLAIN, 12);
-                                Map attributes = font.getAttributes();
-                                attributes.put(TextAttribute.FONT, TextAttribute.FONT);
-                                Font newFont = new Font(attributes);
+                            Font font = new Font("helvetica", Font.PLAIN, 12);
+                            Map attributes = font.getAttributes();
+                            attributes.put(TextAttribute.FONT, TextAttribute.FONT);
+                            Font newFont = new Font(attributes);
 
-                                int test = textAreaToGridY.get((JTextArea)e.getComponent())+1;
-                                paneConstraints.gridx = textAreaToGridX.get((JTextArea)e.getComponent());
-                                paneConstraints.gridy = textAreaToGridY.get((JTextArea)e.getComponent()) + 1;
-                                double X = ((JTextArea) e.getComponent()).getLocation().getX();
-                                double Y = ((JTextArea) e.getComponent()).getLocation().getY();
-                                System.out.println("Position du X " +(int) X);
-                                System.out.println("Position du Y " +(int) Y);
-                                contra.setLocation((int) X, (int) Y + 10);
-                                System.out.println(contra.getLocation());
-                                pane.add(contra , paneConstraints);
-                                ((JTextArea) e.getComponent()).setFont(newFont);
+                            int test = textAreaToGridY.get((JTextArea)e.getComponent())+1;
+                            paneConstraints.gridx = textAreaToGridX.get((JTextArea)e.getComponent());
+                            paneConstraints.gridy = textAreaToGridY.get((JTextArea)e.getComponent()) + 1;
+                            double X = ((JTextArea) e.getComponent()).getLocation().getX();
+                            double Y = ((JTextArea) e.getComponent()).getLocation().getY();
+                            System.out.println("Position du X " +(int) X);
+                            System.out.println("Position du Y " +(int) Y);
+                            contra.setLocation((int) X, (int) Y + 10);
+                            System.out.println(contra.getLocation());
+                            pane.add(contra , paneConstraints);
+                            ((JTextArea) e.getComponent()).setFont(newFont);
 
-                                for (MouseListener m : e.getComponent().getMouseListeners()) {
-                                    e.getComponent().removeMouseListener(m);
-                                }
-                            } else {
-                                JTextArea contra = new JTextArea();
-                                contra.setEditable(false);
-                                contra.setText("X");
-                                contra.setBounds(5, 30, 990, 30);
+                            for (MouseListener m : e.getComponent().getMouseListeners()) {
+                                e.getComponent().removeMouseListener(m);
+                            }
+                        } else {
+                            JTextArea contra = new JTextArea();
+                            contra.setEditable(false);
+                            contra.setText("X");
+                            contra.setBounds(5, 30, 990, 30);
 
-                                Font font = new Font("helvetica", Font.PLAIN, 12);
-                                Map attributes = font.getAttributes();
-                                attributes.put(TextAttribute.FONT, TextAttribute.FONT);
-                                Font newFont = new Font(attributes);
+                            Font font = new Font("helvetica", Font.PLAIN, 12);
+                            Map attributes = font.getAttributes();
+                            attributes.put(TextAttribute.FONT, TextAttribute.FONT);
+                            Font newFont = new Font(attributes);
 
-                               int test = textAreaToGridY.get((JTextArea)e.getComponent())+1;
-                                paneConstraints.gridx = textAreaToGridX.get((JTextArea)e.getComponent());
-                                paneConstraints.gridy = textAreaToGridY.get((JTextArea)e.getComponent()) + 1;
-                                double X = ((JTextArea) e.getComponent()).getLocation().getX();
-                                double Y = ((JTextArea) e.getComponent()).getLocation().getY();
-                                System.out.println("Position du X " +(int) X);
-                                System.out.println("Position du Y " +(int) Y);
-                                contra.setLocation((int) X, (int) Y + 10);
-                                System.out.println(contra.getLocation());
-                                pane.add(contra , paneConstraints);
-                                ((JTextArea) e.getComponent()).setFont(newFont);
+                            int test = textAreaToGridY.get((JTextArea)e.getComponent())+1;
+                            paneConstraints.gridx = textAreaToGridX.get((JTextArea)e.getComponent());
+                            paneConstraints.gridy = textAreaToGridY.get((JTextArea)e.getComponent()) + 1;
+                            double X = ((JTextArea) e.getComponent()).getLocation().getX();
+                            double Y = ((JTextArea) e.getComponent()).getLocation().getY();
+                            System.out.println("Position du X " +(int) X);
+                            System.out.println("Position du Y " +(int) Y);
+                            contra.setLocation((int) X, (int) Y + 10);
+                            System.out.println(contra.getLocation());
+                            pane.add(contra , paneConstraints);
+                            ((JTextArea) e.getComponent()).setFont(newFont);
 
-                                for (MouseListener m : e.getComponent().getMouseListeners()) {
-                                    e.getComponent().removeMouseListener(m);
-                                }
+                            for (MouseListener m : e.getComponent().getMouseListeners()) {
+                                e.getComponent().removeMouseListener(m);
                             }
                         }
                     }
                 }
+            }
 
             @Override
             public void mousePressed(MouseEvent e) {
